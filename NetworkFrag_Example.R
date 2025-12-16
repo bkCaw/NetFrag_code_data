@@ -27,9 +27,7 @@
 
 library(igraph)
 library(tibble)
-# source("robustAnalysis.R") #source outDegNeigh and robustAnalysis functions
-#install("netRobustHelpers")
-require(netRobustHelpers)
+source("robustAnalysis.R") #source the outDegNeigh and robustAnalysis functions
 
 #### Read in data and initialise vars  #########################################################
 #read in aquaculture connectivity graph
@@ -75,13 +73,13 @@ for (a in ageRange){
     nds2plt[[age_str]]<-tibble::add_column(nds2plt[[age_str]],btw=0)
     nds2plt[[age_str]]$whichClust[as.numeric(names(whichClust))]<-whichClust
     
-    #loop over number of out neighbours
+    #loop over given range of out neighbours
     for (n in outNeighRng){
       print(paste('Processing out neighbours: ',n))
       outNeighStr<-as.character(n)
      
       # Calc robustness for each age
-      rbLstBtwn[[age_str]][[outNeighStr]]<-netRobustHelpers::robustAnalysis(g_transform,numXtra=n)
+      rbLstBtwn[[age_str]][[outNeighStr]]<-robustAnalysis(g_transform,numXtra=n)
       nds2plt[[age_str]]$btw<-rbLstBtwn[[age_str]][[outNeighStr]][['nodeImp']]
     }
     print(paste('Age done: ',a))
